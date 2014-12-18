@@ -1,0 +1,18 @@
+MEAN:  0.5167229E+001  0.3671303E+001  0.0000000E+000  0.3571668E+001  0.0000000E+000  0.0000000E+000  0.2172339E+001  0.0000000E+000  0.0000000E+000
+VARIANCE:  0.5597249E+002  0.1001429E+002  0.0000000E+000  0.2001307E+002  0.0000000E+000  0.0000000E+000  0.2636845E+001  0.0000000E+000  0.0000000E+000
+VS     1     1     0.0006     0.0982        NaN     0.0000        NaN        NaN     0.1159        NaN        NaN     0.0172     0.3784        NaN     0.0000        NaN        NaN     0.4916        NaN        NaN
+VS     2     2     0.0003     0.0144        NaN    -0.0000        NaN        NaN     0.0203        NaN        NaN     0.0213     0.1680        NaN     0.0000        NaN        NaN     0.2493        NaN        NaN
+VS     3     3     0.0003     0.0049        NaN    -0.0000        NaN        NaN     0.0048        NaN        NaN     0.0251     0.0746        NaN     0.0000        NaN        NaN     0.1517        NaN        NaN
+VS     4     4     0.0147     0.0462        NaN     0.0000        NaN        NaN     0.0964        NaN        NaN     0.0810     0.1731        NaN     0.0000        NaN        NaN     0.4365        NaN        NaN
+VS     5     5     0.0183     0.0679        NaN    -0.0000        NaN        NaN     0.0475        NaN        NaN     0.0770     0.1243        NaN     0.0000        NaN        NaN     0.2414        NaN        NaN
+VS     6     6     0.1459     0.1355        NaN     0.0000        NaN        NaN     0.0000        NaN        NaN     0.2158     0.2040        NaN     0.0000        NaN        NaN     0.0000        NaN        NaN
+VP     1     1    -0.0007     0.0083        NaN     0.0108        NaN        NaN     0.0000        NaN        NaN     0.0368     0.0284        NaN     0.0936        NaN        NaN     0.0000        NaN        NaN
+VP     2     2     0.0036     0.0117        NaN     0.0117        NaN        NaN     0.0000        NaN        NaN     0.1169     0.0815        NaN     0.2244        NaN        NaN     0.0000        NaN        NaN
+VP     3     3     0.0018     0.0049        NaN     0.0027        NaN        NaN     0.0000        NaN        NaN     0.0631     0.0191        NaN     0.0994        NaN        NaN     0.0000        NaN        NaN
+VP     4     4     0.0413     0.0310        NaN     0.1532        NaN        NaN     0.0000        NaN        NaN     0.4699     0.1199        NaN     0.7760        NaN        NaN     0.0000        NaN        NaN
+VP     5     5     0.1097     0.0841        NaN     0.0193        NaN        NaN     0.0000        NaN        NaN     0.5651     0.1915        NaN     0.3005        NaN        NaN     0.0000        NaN        NaN
+TH     1     1     0.0012     0.0142        NaN    -0.0012        NaN        NaN     0.0155        NaN        NaN     0.1702     0.3207        NaN     0.2644        NaN        NaN     0.4201        NaN        NaN
+TH     2     2     0.0026     0.0052        NaN     0.0045        NaN        NaN     0.0036        NaN        NaN     0.1543     0.1230        NaN     0.2359        NaN        NaN     0.1624        NaN        NaN
+TH     3     3     0.0018     0.0012        NaN     0.0012        NaN        NaN     0.0036        NaN        NaN     0.1222     0.0645        NaN     0.1311        NaN        NaN     0.1299        NaN        NaN
+TH     4     4     0.0376     0.0070        NaN     0.0462        NaN        NaN     0.0278        NaN        NaN     0.5781     0.1478        NaN     0.6696        NaN        NaN     0.3377        NaN        NaN
+TH     5     5     0.0118    -0.0000        NaN    -0.0008        NaN        NaN     0.0218        NaN        NaN     0.3454     0.0000        NaN     0.1454        NaN        NaN     0.1431        NaN        NaN
