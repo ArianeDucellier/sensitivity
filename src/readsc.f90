@@ -73,8 +73,8 @@ CLOSE(99)
 ! FILL MATRIX OF INITIAL SOIL COLUMN
 !*******************************************************************************************************************************************
 !
-DO I = 1,IGNLAYE
-   DO J = 1,IGNBPRM
+DO J = 1,IGNBPRM
+   DO I = 1,IGNLAYE
       DGPRINI(I,J) = 0.0D0
    ENDDO
 ENDDO

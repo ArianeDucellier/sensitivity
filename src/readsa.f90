@@ -67,8 +67,8 @@ CLOSE(99)
 ! FILL MATRICES RANDOMLY
 !*******************************************************************************************************************************************
 !
-DO I = 1,IGSOBOL
-   DO J = 1,IGNBPRM
+DO J = 1,IGNBPRM
+   DO I = 1,IGSOBOL
       CALL RANDOM_NUMBER(X1)
       DGVECT1(I,J) = X1*(DGBNDPR(J,2)-DGBNDPR(J,1)) + DGBNDPR(J,1)
       CALL RANDOM_NUMBER(X2)
