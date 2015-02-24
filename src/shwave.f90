@@ -65,6 +65,7 @@ ZSHSPR(:)= CMPLX(1.0D0,0.0D0)
 ! START LOOP ON PULSATION (FREQUENCY = 0.0 GIVES NaN)
 !*******************************************************************************************************************************************
 !
+!$OMP PARALLEL DO PRIVATE(W,DAMP,ZG_HS,ZVS_HS,ZP,ZG,ZVS,Z_ETA,D,ZF_HS,Z_INI,IL,ZPROPAG,ZF_OBJ,ZE)
 DO IFR = 1,(IGNFOLD-1)
 !
    W = IFR*DW
@@ -164,6 +165,7 @@ DO IFR = 1,(IGNFOLD-1)
    ZV_HS(IFR)   = (ZW_HS_D(IFR)*ZF_HS(1,1)      + ZW_HS_U(IFR)*ZF_HS(1,2))   
    ZSHSPR(IFR)  = ZV_OBJ(IFR)/ZV_HS(IFR)
 ENDDO
+!$OMP END PARALLEL DO
 !
 !*******************************************************************************************************************************************
 ! PARZEN'S SPECTRAL WINDOW
@@ -180,25 +182,31 @@ ENDIF
 ! SH TRANSFER FUNCTION
 !
 IF ( (CGTYPIN.EQ."SPR") .OR. (CGTYPIN.EQ."SUM") ) THEN
+   !$OMP PARALLEL DO
    DO I = 1,(IGNFOLD-1)
       DGRTSHY(I) = AMZV_OBJ(I)/AMZV_HS(I)
    ENDDO
+   !$OMP END PARALLEL DO
 ENDIF
 !
 ! INVERSION WITH HV RATIO (BOTTOM) OR COMBINATION OF SEVERAL RATIOS
 !
 IF ( (CGTYPIN.EQ."HVB") .OR. (CGTYPIN.EQ."SUM") ) THEN
+   !$OMP PARALLEL DO
    DO I = 1,(IGNFOLD-1)
       DGTRSHB(I) = AMZV_HS(I)
    ENDDO
+   !$OMP END PARALLEL DO
 ENDIF
 !
 ! INVERSION WITH HV RATIO (TOP) OR COMBINATION OF SEVERAL RATIOS
 !
 IF ( (CGTYPIN.EQ."HVT") .OR. (CGTYPIN.EQ."SUM") ) THEN
+   !$OMP PARALLEL DO
    DO I = 1,(IGNFOLD-1)
       DGTRSHT(I) = AMZV_OBJ(I)
    ENDDO
+   !$OMP END PARALLEL DO
 ENDIF
 !
 DEALLOCATE(ZW_HS_U,ZW_HS_D,ZW_OBJ_U,ZV_HS,ZV_OBJ,ZSHSPR,AMZV_OBJ,AMZV_HS)

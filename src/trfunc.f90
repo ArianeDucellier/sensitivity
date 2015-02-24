@@ -40,9 +40,11 @@ INTEGER             :: I,ILACTIN
 ! UPDATE OF POISSON RATIO
 !*******************************************************************************************************************************************
 !
+!$OMP PARALLEL DO
 DO I = 1,IGNLAYE
    DGINVNU(I) =(DGINVVP(I)**2-2.0D0*DGINVVS(I)**2)/(2.0D0*(DGINVVP(I)**2-DGINVVS(I)**2))
 ENDDO
+!$OMP END PARALLEL DO
 !
 !*******************************************************************************************************************************************
 ! CALL THOMSON-HASKELL PROPAGATOR MATRIX

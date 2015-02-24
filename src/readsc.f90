@@ -73,12 +73,15 @@ CLOSE(99)
 ! FILL MATRIX OF INITIAL SOIL COLUMN
 !*******************************************************************************************************************************************
 !
+!$OMP PARALLEL DO PRIVATE(I)
 DO J = 1,IGNBPRM
    DO I = 1,IGNLAYE
       DGPRINI(I,J) = 0.0D0
    ENDDO
 ENDDO
+!$OMP END PARALLEL DO
 !
+!$OMP PARALLEL DO PRIVATE(J)
 DO I = 1,IGNBPRM
    IF (TRIM(ADJUSTL(CGPRTYP(I))).EQ."VS") THEN
       DO J = IGLAYPR(I,1),IGLAYPR(I,2)
@@ -118,6 +121,7 @@ DO I = 1,IGNBPRM
       ENDDO
    ENDIF
 ENDDO
+!$OMP END PARALLEL DO
 !
 DO I = 1,IGNBPRM
    WRITE(10,'(2A)') "TYPE OF PARAMETER: ",TRIM(ADJUSTL(CGPRTYP(I)))

@@ -67,6 +67,7 @@ CLOSE(99)
 ! FILL MATRICES RANDOMLY
 !*******************************************************************************************************************************************
 !
+!$OMP PARALLEL DO PRIVATE(I,X1,X2)
 DO J = 1,IGNBPRM
    DO I = 1,IGSOBOL
       CALL RANDOM_NUMBER(X1)
@@ -75,6 +76,7 @@ DO J = 1,IGNBPRM
       DGVECT2(I,J) = X2*(DGBNDPR(J,2)-DGBNDPR(J,1)) + DGBNDPR(J,1)
    ENDDO
 ENDDO
+!$OMP END PARALLEL DO
 !
 !*******************************************************************************************************************************************
 ! INITIALIZE VECTORS FOR MEAN

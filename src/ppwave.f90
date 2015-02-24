@@ -68,6 +68,7 @@ ZUX_HS(:)  = CMPLX(0.0D0,0.0D0)
 ! START LOOP ON PULSATION (FREQUENCY = 0.0 GIVES NaN)
 !*******************************************************************************************************************************************
 !
+!$OMP PARALLEL DO PRIVATE(W,DAMP,ZG_HS,ZVS_HS,ZVP_HS,ZP,ZG,ZVS,ZVP,Z_ETA,Z_XI,D,ZF_HS,Z_INI,IL,ZPROPAG,ZF_OBJ)
 DO IFR = 1,(IGNFOLD-1)
 !
    W = IFR*DW
@@ -291,6 +292,7 @@ DO IFR = 1,(IGNFOLD-1)
    ZSVSPRX(IFR) = ZUX_OBJ(IFR)/ZUX_HS(IFR)
    ZSVSPRZ(IFR) = ZUZ_OBJ(IFR)/ZUZ_HS(IFR)
 ENDDO
+!$OMP END PARALLEL DO
 !
 !*******************************************************************************************************************************************
 ! PARZEN'S SPECTRAL WINDOW
@@ -309,9 +311,11 @@ IF ( (CGTYPIN.EQ."SPR") .AND. (OPT_INC.GT.1.0D-4) ) THEN
          CALL SPEWIN(AMZUX_OBJ,DGDFREQ,DGSPBAN)
          CALL SPEWIN(AMZUX_HS ,DGDFREQ,DGSPBAN)
       ENDIF
+      !$OMP PARALLEL DO
       DO I = 1,(IGNFOLD-1)
          DGRTPPX(I) = AMZUX_OBJ(I)/AMZUX_HS(I)
       ENDDO
+      !$OMP END PARALLEL DO
    ENDIF
 ELSE
    DGRTPPX(:) = 0.0D0
@@ -331,25 +335,31 @@ ELSE
 ! PZ OR PSZ TRANSFER FUNCTION
 !
    IF ( (CGTYPIN.EQ."SPR") .OR. (CGTYPIN.EQ."SUM") ) THEN
+      !$OMP PARALLEL DO
       DO I = 1,(IGNFOLD-1)
          DGRTPPZ(I) = AMZUZ_OBJ(I)/AMZUZ_HS(I)
       ENDDO
+      !$OMP END PARALLEL DO
    ENDIF
 !
 ! INVERSION WITH HV RATIO (BOTTOM) OR COMBINATION OF SEVERAL RATIOS
 !
    IF ( (CGTYPIN.EQ."HVB") .OR. (CGTYPIN.EQ."SUM") ) THEN
+      !$OMP PARALLEL DO
       DO I = 1,(IGNFOLD-1)
          DGTRPZB(I) = AMZUZ_HS(I)
       ENDDO
+      !$OMP END PARALLEL DO
    ENDIF
 !
 ! INVERSION WITH HV RATIO (TOP) OR COMBINATION OF SEVERAL RATIOS
 !
    IF ( (CGTYPIN.EQ."HVT") .OR. (CGTYPIN.EQ."SUM") ) THEN
+      !$OMP PARALLEL DO
       DO I = 1,(IGNFOLD-1)
          DGTRPZT(I) = AMZUZ_OBJ(I)
       ENDDO
+      !$OMP END PARALLEL DO
    ENDIF
 !
 ENDIF

@@ -3,11 +3,11 @@
 
 # Compilateur et editeur de liens
 FC      = ifort -traceback
-FLD     = $(FC) -traceback
+FLD     = $(FC)
 RM      = rm -f
 
 # Option de profilage
-PROF    = -O3
+PROF    = -O3 -openmp
 
 # Option de compilation
 FFLAGS  = $(PROF)

@@ -47,7 +47,8 @@ DOUBLE PRECISION                              :: DGDELTT,DGDFREQ                
 !
 INTEGER         , DIMENSION(:,:), ALLOCATABLE :: IGLAYPR
 !
-INTEGER                                       :: IGIDDMP,IGINDPR,IGLAOBJ,IGLAREF,IGNBPRM,IGNFOLD,IGNLAYE,IGNT___,IGSOBOL
+INTEGER                                       :: IGIDDMP,IGINDPR,IGLAOBJ,IGLAREF,IGNBPRM,IGNFOLD,IGNLAYE,IGNT___,IGNTHRD                   &
+                                                ,IGSOBOL
 !
 CHARACTER(10)   , DIMENSION(:)  , ALLOCATABLE :: CGPRTYP
 !

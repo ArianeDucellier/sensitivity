@@ -21,6 +21,8 @@ PROGRAM CSOBOL
 !
 !*******************************************************************************************************************************************
 !
+USE OMP_LIB
+!
 USE AAMODU_GLOBVA, ONLY : DGPVHVB,DGPVHVT,DGPVPPX,DGPVPPZ,DGPVPSX,DGPVPSZ,DGPVSHY,DGPVSVX,DGPVSVZ                                          &
                          ,DGSFHVB,DGSFHVT,DGSFPPX,DGSFPPZ,DGSFPSX,DGSFPSZ,DGSFSHY,DGSFSVX,DGSFSVZ                                          &
                          ,DGSUHVB,DGSUHVT,DGSUPPX,DGSUPPZ,DGSUPSX,DGSUPSZ,DGSUSHY,DGSUSVX,DGSUSVZ                                          &
@@ -35,7 +37,7 @@ USE AAMODU_GLOBVA, ONLY : DGPVHVB,DGPVHVT,DGPVPPX,DGPVPPZ,DGPVPSX,DGPVPSZ,DGPVSH
                          ,DGVMHVB,DGVMHVT,DGVMPPX,DGVMPPZ,DGVMPSX,DGVMPSZ,DGVMSHY,DGVMSVX,DGVMSVZ                                          &
 !
                          ,IGLAYPR                                                                                                          &
-                         ,IGINDPR,IGNBPRM,IGNFOLD,IGSOBOL                                                                                  &
+                         ,IGINDPR,IGNBPRM,IGNFOLD,IGNTHRD,IGSOBOL                                                                          &
 !
                          ,CGPRTYP                                                                                                          &
                          ,CGIDPPX,CGIDPPZ,CGIDPSX,CGIDPSZ,CGIDSHY,CGIDSVX,CGIDSVZ,CGTYPIN                                                  &
@@ -58,6 +60,10 @@ INTEGER                                     :: I,ILSOBOL,IW,J
 !*******************************************************************************************************************************************
 !
 CALL CPU_TIME(TIME1)
+!
+IGNTHRD = 1
+!$ IGNTHRD = 6
+!$ CALL OMP_SET_NUM_THREADS(IGNTHRD)
 !
 CALL READPF(CGPREFI)
 CGFINPU = TRIM(ADJUSTL(CGPREFI))//".in"
@@ -165,6 +171,7 @@ DO ILSOBOL = 1,IGSOBOL
 ! COMPUTATION OF MEAN
 !*******************************************************************************************************************************************
 !
+   !$OMP PARALLEL DO
    DO IW = 1,(IGNFOLD-1)
       DGMNHVB(IW) = DGMNHVB(IW) + DLR1HVB(IW)/IGSOBOL
       DGMNHVT(IW) = DGMNHVT(IW) + DLR1HVT(IW)/IGSOBOL
@@ -176,11 +183,13 @@ DO ILSOBOL = 1,IGSOBOL
       DGMNSVX(IW) = DGMNSVX(IW) + DLR1SVX(IW)/IGSOBOL
       DGMNSVZ(IW) = DGMNSVZ(IW) + DLR1SVZ(IW)/IGSOBOL
    ENDDO
+   !$OMP END PARALLEL DO
 !
 !*******************************************************************************************************************************************
 ! COMPUTATION OF TOTAL VARIANCE
 !*******************************************************************************************************************************************
 !
+   !$OMP PARALLEL DO
    DO IW = 1,(IGNFOLD-1)
       DGVTHVB(IW) = DGVTHVB(IW) + DLR1HVB(IW)*DLR1HVB(IW)/(IGSOBOL-1)
       DGVTHVT(IW) = DGVTHVT(IW) + DLR1HVT(IW)*DLR1HVT(IW)/(IGSOBOL-1)
@@ -192,6 +201,7 @@ DO ILSOBOL = 1,IGSOBOL
       DGVTSVX(IW) = DGVTSVX(IW) + DLR1SVX(IW)*DLR1SVX(IW)/(IGSOBOL-1)
       DGVTSVZ(IW) = DGVTSVZ(IW) + DLR1SVZ(IW)*DLR1SVZ(IW)/(IGSOBOL-1)
    ENDDO
+   !$OMP END PARALLEL DO
 !
    CALL CPU_TIME(TIME_TEMP2)
 !
@@ -218,6 +228,7 @@ DO ILSOBOL = 1,IGSOBOL
 ! COMPUTATION OF FIRST ORDER PARTIAL VARIANCES
 !*******************************************************************************************************************************************
 !
+      !$OMP PARALLEL DO
       DO IW = 1,(IGNFOLD-1)
          DGUVHVB(IGINDPR,IW) = DGUVHVB(IGINDPR,IW) + DLR2HVB(IW)*(DGRTHVB(IW)-DLR1HVB(IW))/(IGSOBOL-1)
          DGUVHVT(IGINDPR,IW) = DGUVHVT(IGINDPR,IW) + DLR2HVT(IW)*(DGRTHVT(IW)-DLR1HVT(IW))/(IGSOBOL-1)
@@ -229,11 +240,13 @@ DO ILSOBOL = 1,IGSOBOL
          DGUVSVX(IGINDPR,IW) = DGUVSVX(IGINDPR,IW) + DLR2SVX(IW)*(DGRTSVX(IW)-DLR1SVX(IW))/(IGSOBOL-1)
          DGUVSVZ(IGINDPR,IW) = DGUVSVZ(IGINDPR,IW) + DLR2SVZ(IW)*(DGRTSVZ(IW)-DLR1SVZ(IW))/(IGSOBOL-1)
       ENDDO
+      !$OMP END PARALLEL DO
 !
 !*******************************************************************************************************************************************
 ! COMPUTATION OF TOTAL PARTIAL VARIANCES
 !*******************************************************************************************************************************************
 !
+      !$OMP PARALLEL DO
       DO IW = 1,(IGNFOLD-1)
          DGPVHVB(IGINDPR,IW) = DGPVHVB(IGINDPR,IW) + ((DGRTHVB(IW)-DLR1HVB(IW))**2)/(2*(IGSOBOL-1))
          DGPVHVT(IGINDPR,IW) = DGPVHVT(IGINDPR,IW) + ((DGRTHVT(IW)-DLR1HVT(IW))**2)/(2*(IGSOBOL-1))
@@ -245,6 +258,7 @@ DO ILSOBOL = 1,IGSOBOL
          DGPVSVX(IGINDPR,IW) = DGPVSVX(IGINDPR,IW) + ((DGRTSVX(IW)-DLR1SVX(IW))**2)/(2*(IGSOBOL-1))
          DGPVSVZ(IGINDPR,IW) = DGPVSVZ(IGINDPR,IW) + ((DGRTSVZ(IW)-DLR1SVZ(IW))**2)/(2*(IGSOBOL-1))
       ENDDO
+      !$OMP END PARALLEL DO
 !
       CALL CPU_TIME(TIME_TEMP4)
       TIME4(IGINDPR) = TIME4(IGINDPR) + (TIME_TEMP4-TIME_TEMP3)
@@ -257,6 +271,8 @@ DO ILSOBOL = 1,IGSOBOL
 !
 ENDDO
 !
+!
+!$OMP PARALLEL DO
 DO IW = 1,(IGNFOLD-1)
    DGVTHVB(IW) = DGVTHVB(IW) - DGMNHVB(IW)*DGMNHVB(IW)*(1+1/(IGSOBOL-1))
    DGVTHVT(IW) = DGVTHVT(IW) - DGMNHVT(IW)*DGMNHVT(IW)*(1+1/(IGSOBOL-1))
@@ -268,6 +284,7 @@ DO IW = 1,(IGNFOLD-1)
    DGVTSVX(IW) = DGVTSVX(IW) - DGMNSVX(IW)*DGMNSVX(IW)*(1+1/(IGSOBOL-1))
    DGVTSVZ(IW) = DGVTSVZ(IW) - DGMNSVZ(IW)*DGMNSVZ(IW)*(1+1/(IGSOBOL-1))
 ENDDO
+!$OMP END PARALLEL DO
 !
 !*******************************************************************************************************************************************
 ! COMPUTE AND WRITE SOBOL INDICES
@@ -308,6 +325,7 @@ IF ( (CGTYPIN.EQ."SPR") .AND. (CGIDSVZ.EQ."SVZ") ) THEN
 ENDIF
 !
 DO IW = 1,(IGNFOLD-1)
+   !$OMP PARALLEL DO
    DO IGINDPR = 1,IGNBPRM
       DGSUHVB(IGINDPR,IW) = DGUVHVB(IGINDPR,IW)/DGVTHVB(IW)
       DGSUHVT(IGINDPR,IW) = DGUVHVT(IGINDPR,IW)/DGVTHVT(IW)
@@ -329,6 +347,7 @@ DO IW = 1,(IGNFOLD-1)
       DGSFSVX(IGINDPR,IW) = DGPVSVX(IGINDPR,IW)/DGVTSVX(IW)
       DGSFSVZ(IGINDPR,IW) = DGPVSVZ(IGINDPR,IW)/DGVTSVZ(IW)
    ENDDO
+   !$OMP END PARALLEL DO
 !
    IF ( (CGTYPIN.EQ."HVB") .OR. (CGTYPIN.EQ."SUM") ) THEN
       WRITE(UNIT=21,FMT='(F10.4,2(E15.7E3),1000(1X,F10.4))') IW*DGDFREQ,DGMNHVB(IW),DGVTHVB(IW),(DGSUHVB(I,IW),I=1,IGNBPRM),(DGSFHVB(J,IW),J=1,IGNBPRM)
